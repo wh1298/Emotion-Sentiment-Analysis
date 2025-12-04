@@ -112,9 +112,8 @@ def main():
         add_page_visited_details("Monitor", datetime.now())
         st.subheader("Monitor Dashboard")
         
-        tabs = st.tabs(["Page Metrics", "Emotion Classifier Metrics"])
-        
-        with tabs[0]:
+        # Page Metrics
+        with st.expander("Page Metrics"):
             page_visits = pd.DataFrame(view_all_page_visited_details(), columns=['Pagename','Time_of_Visit'])
             st.dataframe(page_visits)
             
@@ -125,13 +124,19 @@ def main():
             p = px.pie(pg_count, values='Counts', names='Pagename')
             st.plotly_chart(p, use_container_width=True)
         
-        with tabs[1]:
+        # Emotion Classifier Metrics
+        with st.expander("Emotion Classifier Metrics"):
             df_emotions = pd.DataFrame(view_all_prediction_details(), columns=['Rawtext','Prediction','Probability','Time_of_Visit'])
             st.dataframe(df_emotions)
             
             st.markdown("**Prediction Distribution:**")
             prediction_count = df_emotions['Prediction'].value_counts().rename_axis('Prediction').reset_index(name='Counts')
-            pc = alt.Chart(prediction_count).mark_bar().encode(x='Prediction', y='Counts', color='Prediction', tooltip=['Prediction','Counts'])
+            pc = alt.Chart(prediction_count).mark_bar().encode(
+                x='Prediction', 
+                y='Counts', 
+                color='Prediction', 
+                tooltip=['Prediction','Counts']
+            )
             st.altair_chart(pc, use_container_width=True)
             
             st.download_button(
