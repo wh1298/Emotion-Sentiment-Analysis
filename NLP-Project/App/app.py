@@ -76,7 +76,7 @@ def main():
 				proba_df_clean = proba_df.T.reset_index()
 				proba_df_clean.columns = ["emotions","probability"]
 
-				fig = alt.Chart(proba_df_clean).mark_bar().encode(x='emotions',y='probability',color='emotions')
+				fig = alt.Chart(proba_df_clean).mark_bar().encode(x='emotions', y='probability', color='emotions',tooltip=['emotions','probability'])
 				st.altair_chart(fig,use_container_width=True)
 
 
